@@ -1,4 +1,4 @@
-package com.example.EmployeeManagementSystem.serviceImpli.mapper;
+package com.example.EmployeeManagementSystem.mapper;
 
 import com.example.EmployeeManagementSystem.Repository.AddressRepository;
 import com.example.EmployeeManagementSystem.Repository.EmployeeRepository;

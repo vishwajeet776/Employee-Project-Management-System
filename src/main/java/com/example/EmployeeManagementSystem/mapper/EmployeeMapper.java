@@ -1,4 +1,4 @@
-package com.example.EmployeeManagementSystem.serviceImpli.mapper;
+package com.example.EmployeeManagementSystem.mapper;
 
 import com.example.EmployeeManagementSystem.Repository.*;
 import com.example.EmployeeManagementSystem.dto.AddressDTO;
@@ -98,4 +98,4 @@ public class EmployeeMapper {
         }
         return employee;
     }
-    }
+}

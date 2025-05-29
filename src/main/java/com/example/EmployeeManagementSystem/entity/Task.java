@@ -31,8 +31,8 @@ public class Task {
     @JsonManagedReference
     private List <Employee> employee;
 
-    @ManyToOne()
- //   @JoinColumn(name = "project_id")
+    @ManyToOne
+ //   @JoinColumn(name = "project_id")  FK column created
     private Project project;
 
 

@@ -1,10 +1,12 @@
 package com.example.EmployeeManagementSystem.serviceImpli;
 
 import com.example.EmployeeManagementSystem.Repository.EmployeeRepository;
+import com.example.EmployeeManagementSystem.Repository.TaskRepository;
 import com.example.EmployeeManagementSystem.dto.EmployeeDTO;
 import com.example.EmployeeManagementSystem.entity.Employee;
+import com.example.EmployeeManagementSystem.entity.Task;
+import com.example.EmployeeManagementSystem.mapper.EmployeeMapper;
 import com.example.EmployeeManagementSystem.service.EmployeeService;
-import com.example.EmployeeManagementSystem.serviceImpli.mapper.EmployeeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class EmployeeServiceImpli implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private TaskRepository taskRepo;
 
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO dto) {
@@ -38,9 +42,23 @@ public class EmployeeServiceImpli implements EmployeeService {
 
     @Override
     public EmployeeDTO updateEmployee(Long id, EmployeeDTO dto) {
+
         Employee emp = empRepo.findById(id).orElseThrow(()->new RuntimeException("Employee not found ID: "+id));
-        emp.setName(dto.getName());
-        emp.setEmail(dto.getEmail());
+
+        // Do NOT change description, startDate, endDate, or projectId (they remain as it is) . in " if( ) block  " those value set want to update other field unchange
+         /* task_id is " FK column" task_id change assign from task class . from task class assign task to employee & task_id auto store in
+                 in employee table */
+
+        if(dto.getEmail() != null) {
+            emp.setEmail(dto.getEmail());
+        }
+       if(dto.getPhone()!=null) {
+            emp.setPhone(dto.getPhone());
+        }
+       if(dto.getSalary()!= null){
+           emp.setSalary( dto.getSalary() );
+       }
+
        
         return employeeMapper.entityToDto(empRepo.save(emp));
     }

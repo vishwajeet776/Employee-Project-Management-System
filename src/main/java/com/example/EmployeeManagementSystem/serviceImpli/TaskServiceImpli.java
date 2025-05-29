@@ -7,8 +7,8 @@ import com.example.EmployeeManagementSystem.dto.TaskDTO;
 import com.example.EmployeeManagementSystem.entity.Employee;
 import com.example.EmployeeManagementSystem.entity.Project;
 import com.example.EmployeeManagementSystem.entity.Task;
+import com.example.EmployeeManagementSystem.mapper.TaskMapper;
 import com.example.EmployeeManagementSystem.service.TaskService;
-import com.example.EmployeeManagementSystem.serviceImpli.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class TaskServiceImpli implements TaskService {
 
     private final EmployeeRepository employeeRepo;
     private final ProjectRepository projectRepo;
-    private final TaskMapper taskMapper;
+    private final TaskMapper  taskMapper;
 
     @Override
     public TaskDTO createTask(TaskDTO dto) {

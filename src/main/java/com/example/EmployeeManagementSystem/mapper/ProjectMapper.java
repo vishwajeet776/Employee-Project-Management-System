@@ -1,4 +1,4 @@
-package com.example.EmployeeManagementSystem.serviceImpli.mapper;
+package com.example.EmployeeManagementSystem.mapper;
 
 import com.example.EmployeeManagementSystem.Repository.ClientRepository;
 import com.example.EmployeeManagementSystem.Repository.EmployeeRepository;
@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 public class ProjectMapper {
     @Autowired
     private ClientRepository clientRepo;
+    @Autowired
+    private TaskRepository taskRepo ;
 
     public ProjectDTO entityToDto(Project project) {
         ProjectDTO dto = new ProjectDTO();
@@ -31,6 +33,8 @@ public class ProjectMapper {
         dto.setProjectStartDate(project.getProjectStartDate());
         dto.setProjectEndDate(project.getProjectEndDate());
         dto.setClientId(project.getClient() != null ? project.getClient().getId() : null);
+
+
         return dto;
     }
 
@@ -47,6 +51,7 @@ public class ProjectMapper {
             Client client = clientRepo.findById(dto.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found"));
             project.setClient(client);
+
         }
         return project;
     }

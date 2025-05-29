@@ -19,4 +19,9 @@ public class ProjectDTO {
     private LocalDate projectEndDate;
     private Long clientId;
 
+    private List<Long> employeeIds;     // Employee IDs list
+    private List<Long> taskIds;         // Task IDs list
+
+
+
 }

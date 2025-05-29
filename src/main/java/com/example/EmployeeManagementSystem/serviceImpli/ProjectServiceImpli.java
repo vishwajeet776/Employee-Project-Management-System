@@ -1,10 +1,15 @@
 package com.example.EmployeeManagementSystem.serviceImpli;
 
+import com.example.EmployeeManagementSystem.Repository.ClientRepository;
+import com.example.EmployeeManagementSystem.Repository.EmployeeRepository;
 import com.example.EmployeeManagementSystem.Repository.ProjectRepository;
+import com.example.EmployeeManagementSystem.Repository.TaskRepository;
 import com.example.EmployeeManagementSystem.dto.ProjectDTO;
+import com.example.EmployeeManagementSystem.entity.Client;
 import com.example.EmployeeManagementSystem.entity.Project;
+import com.example.EmployeeManagementSystem.entity.Task;
+import com.example.EmployeeManagementSystem.mapper.ProjectMapper;
 import com.example.EmployeeManagementSystem.service.ProjectService;
-import com.example.EmployeeManagementSystem.serviceImpli.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +21,15 @@ public class ProjectServiceImpli implements ProjectService {
 
     @Autowired
     private ProjectRepository projectRepo;
+    @Autowired
+    private ClientRepository clientRepo;
+    @Autowired
+    private EmployeeRepository employeeRepo;
+    @Autowired
+    private TaskRepository taskRepo;
 
     @Autowired
-    private ProjectMapper projectMapper;
+    private ProjectMapper  projectMapper;
 
     @Override
     public ProjectDTO createProject(ProjectDTO dto) {
@@ -47,14 +58,20 @@ public class ProjectServiceImpli implements ProjectService {
                                     existingProject.setName(pdto.getName());   }   */
 
         ifNonNull(pdto.getName() , existingProject ::setName);
-        ifNonNull(pdto.getDescription() ,  existingProject ::setDescription);
+        ifNonNull(pdto.getDescription() , existingProject ::setDescription);
         ifNonNull(pdto.getStatus() , existingProject :: setStatus);
         ifNonNull(pdto.getProjectStartDate() , existingProject :: setProjectStartDate);
         ifNonNull(pdto.getProjectEndDate() , existingProject :: setProjectEndDate);
 
-        return projectMapper.entityToDto(projectRepo.save(existingProject));
+        if(pdto.getClientId() != null) {
+            Client clientAavilable = clientRepo.findById(id).orElseThrow(() -> new RuntimeException("client Not found with ID :" + id));
 
-    }
+            existingProject.setClient(clientAavilable);
+
+        }
+            return projectMapper.entityToDto(projectRepo.save(existingProject));
+
+        }
 
 
     @Override
