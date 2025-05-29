@@ -27,7 +27,6 @@ public class Employee {
 
     @OneToOne(cascade = CascadeType.PERSIST)       //PERSIST = When you save() the parent, the related entity is also saved. Use when creating new related entities together.// CascadeType.All =Applies all the above operations.	Use only if the child fully depends on the parent and should mirror changes.
     @JoinColumn(name = "address_id" )
-
     @JsonBackReference
     private Address address;
 

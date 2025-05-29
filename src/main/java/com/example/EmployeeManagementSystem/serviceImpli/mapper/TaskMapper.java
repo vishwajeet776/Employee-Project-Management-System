@@ -33,9 +33,6 @@ public class TaskMapper {
     @Autowired
     private ProjectRepository projectRepo;
 
-    @Autowired
-    private TaskRepository taskRepo;
-
     public Task dtoToEntity(TaskDTO dto) {
         Task task = new Task();
         task.setId(dto.getId());
@@ -47,7 +44,7 @@ public class TaskMapper {
 
         //this is use to check emp ID avilable or not and set taskId in employee table
 
-        if (dto.getEmployeeId() != null) {
+        if (dto.getEmployeeId() != null) {           //// assuming each employee links to this task
             List<Employee> employees = dto.getEmployeeId().stream()
                     .map(id -> employeeRepo.findById(id)
                             .orElseThrow(() -> new RuntimeException("Employee not found: " + id)))

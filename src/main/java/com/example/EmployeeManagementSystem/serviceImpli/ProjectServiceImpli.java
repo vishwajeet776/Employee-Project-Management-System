@@ -37,15 +37,25 @@ public class ProjectServiceImpli implements ProjectService {
     }
 
     @Override
-    public ProjectDTO updateProject(Long id, ProjectDTO dto) {
-        Project project = projectRepo.findById(id).orElseThrow();
-        project.setName(dto.getName());
-        project.setDescription(dto.getDescription());
-        project.setStatus(dto.getStatus());
-        project.setProjectStartDate(dto.getProjectStartDate());
-        project.setProjectEndDate(dto.getProjectEndDate());
-        return projectMapper.entityToDto(projectRepo.save(project));
+    public ProjectDTO updateProject(Long id, ProjectDTO pdto) {
+
+        Project existingProject = projectRepo.findById(id).orElseThrow(()->new RuntimeException("project not Found ID :"+ id));
+
+       //ProjectService Check for ifNonNull Method howni have use..
+
+        /*                     if(pdto.getName()!=null) {
+                                    existingProject.setName(pdto.getName());   }   */
+
+        ifNonNull(pdto.getName() , existingProject ::setName);
+        ifNonNull(pdto.getDescription() ,  existingProject ::setDescription);
+        ifNonNull(pdto.getStatus() , existingProject :: setStatus);
+        ifNonNull(pdto.getProjectStartDate() , existingProject :: setProjectStartDate);
+        ifNonNull(pdto.getProjectEndDate() , existingProject :: setProjectEndDate);
+
+        return projectMapper.entityToDto(projectRepo.save(existingProject));
+
     }
+
 
     @Override
     public void deleteProject(Long id) {
