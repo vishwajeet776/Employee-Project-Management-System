@@ -8,6 +8,7 @@ import com.example.EmployeeManagementSystem.dto.ProjectDTO;
 import com.example.EmployeeManagementSystem.entity.Client;
 import com.example.EmployeeManagementSystem.entity.Project;
 import com.example.EmployeeManagementSystem.entity.Task;
+import com.example.EmployeeManagementSystem.exceptionHandler.ResourseNotFoundException;
 import com.example.EmployeeManagementSystem.mapper.ProjectMapper;
 import com.example.EmployeeManagementSystem.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,9 @@ public class ProjectServiceImpli implements ProjectService {
 
     @Override
     public void deleteProject(Long id) {
+
+        projectRepo.findById(id).orElseThrow(()->new ResourseNotFoundException("project Not Found ID:"+ id));
+
         projectRepo.deleteById(id);
     }
 }

@@ -100,6 +100,8 @@ public class ClientServiceImpli implements ClientService {
     @Override
     public void deleteClient(Long id) {
 
+        clientRepo.findById(id).orElseThrow(()->new RuntimeException("client Not Fouund ID:" + id));
+
         clientRepo.deleteById(id);
     }
 }

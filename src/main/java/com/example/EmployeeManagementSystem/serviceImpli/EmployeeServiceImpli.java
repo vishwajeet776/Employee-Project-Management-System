@@ -6,6 +6,7 @@ import com.example.EmployeeManagementSystem.Repository.TaskRepository;
 import com.example.EmployeeManagementSystem.dto.EmployeeDTO;
 import com.example.EmployeeManagementSystem.entity.Employee;
 import com.example.EmployeeManagementSystem.entity.Task;
+import com.example.EmployeeManagementSystem.exceptionHandler.ResourseNotFoundException;
 import com.example.EmployeeManagementSystem.mapper.EmployeeMapper;
 import com.example.EmployeeManagementSystem.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,9 @@ public class EmployeeServiceImpli implements EmployeeService {
 
     @Override
     public void deleteEmployee(Long id) {
+
+        empRepo.findById(id).orElseThrow(()-> new ResourseNotFoundException("employee Not Found ID: "+ id));
+
         empRepo.deleteById(id);
     }
 }
