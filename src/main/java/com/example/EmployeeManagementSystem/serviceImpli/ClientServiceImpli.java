@@ -50,7 +50,7 @@ public class ClientServiceImpli implements ClientService {
         /*    existing.setName(dto.getName());           //  this type use then compulsory to assign value to all field if not assign then  "null store"
            existing.setContractStartDate(dto.getContractStartDate());
         */
-        //email, phone, contractEndDate we able to update bez we use " if( !=null )" block or not assign va lue then privious value store & not give null
+        // * email, phone, contractEndDate & all Address fields * we able to update bez we use " if( !=null )" block or not assign va lue then privious value store & not give null
         // able to change 1 or all 3 field. other field set privious data.
 
         // Update simple fields
@@ -66,17 +66,15 @@ public class ClientServiceImpli implements ClientService {
             existingClient.setContractEndDate(dto.getContractEndDate());
         }
 
-        // Update nested address fields all provided  field  update only
+        // Update AddressDTo object nested address fields all provided  field  update only
         if (dto.getAddressDto() != null) {
             AddressDTO addressDto = dto.getAddressDto();
             Address address = existingClient.getAddress();
 
-            if (address != null) {
-                address = new Address(); // or throw exception if address should always exist
-            }
 
-            if (addressDto.getPincode() != null) {
-                address.setPincode(addressDto.getPincode());
+            if(addressDto.getAddress()!=null)
+            {
+              address.setAddress( addressDto.getAddress() ); ;
             }
 
             if (addressDto.getCity() != null) {
@@ -87,11 +85,17 @@ public class ClientServiceImpli implements ClientService {
                 address.setState(addressDto.getState());
             }
 
+            if (addressDto.getPincode() != null) {
+                address.setPincode(addressDto.getPincode());
+            }
+
+
             existingClient.setAddress(address);
         }
 
         return clientMapper.entityToDto(clientRepo.save(existingClient));
     }
+
 
     @Override
     public void deleteClient(Long id) {

@@ -31,12 +31,12 @@ public class Employee {
     private Address address;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id")          //FK
     @JsonBackReference
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id")       //FK
     @JsonBackReference
     private Project project;
 
@@ -63,5 +63,6 @@ public class Employee {
   }
 }
 
+  //** task_id not pass bez its Fk we assign task to empoloyee from Task table then auto store in employee table
 
  */

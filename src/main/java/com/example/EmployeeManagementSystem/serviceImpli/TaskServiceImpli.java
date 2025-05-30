@@ -7,10 +7,12 @@ import com.example.EmployeeManagementSystem.dto.TaskDTO;
 import com.example.EmployeeManagementSystem.entity.Employee;
 import com.example.EmployeeManagementSystem.entity.Project;
 import com.example.EmployeeManagementSystem.entity.Task;
+import com.example.EmployeeManagementSystem.exceptionHandler.ResourseNotFoundException;
 import com.example.EmployeeManagementSystem.mapper.TaskMapper;
 import com.example.EmployeeManagementSystem.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,17 +54,12 @@ public class TaskServiceImpli implements TaskService {
                 .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
 
         // all "if{} condition check any field not provide ot updtate then store privious value automatically
-        if(dto.getTitle()!=null) {
-            existingTask.setTitle(dto.getTitle());
-        }
+
         if(dto.getDescription()!=null) {
             existingTask.setDescription(dto.getDescription());
         }
         if(dto.getStatus()!=null) {
             existingTask.setStatus(dto.getStatus());
-        }
-        if(dto.getStartDate()!=null) {
-            existingTask.setStartDate(dto.getStartDate());
         }
         if(dto.getEndDate() !=null) {
             existingTask.setEndDate(dto.getEndDate());
@@ -72,10 +69,12 @@ public class TaskServiceImpli implements TaskService {
         {
           List<Employee> empAvailable = employeeRepo.findAllById(dto.getEmployeeId());
 
-          for(Employee emp : empAvailable)       // forEach loop use to set foreign key taskId in employee table
+         /* for(Employee emp : empAvailable)       // forEach loop use to set foreign key taskId in employee table
           {
               emp.setTask(existingTask);
           }
+
+          */
             existingTask.setEmployee(empAvailable);
 
         }
@@ -93,7 +92,10 @@ public class TaskServiceImpli implements TaskService {
     }
 
     @Override
-    public void deleteTask(Long id) {
-        taskRepo.deleteById(id);
+    public String deleteTask(Long id) {
+     Task taskDelete = taskRepo.findById(id).orElseThrow(()-> new ResourseNotFoundException("Id not found: "+id));
+                                      // ResourseNotFoundException declare in exceptionHandler package
+           taskRepo.delete(taskDelete);
+               return "task deleted with ID: "+ id;
     }
 }

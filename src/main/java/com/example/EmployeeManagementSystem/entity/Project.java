@@ -29,7 +29,7 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private List<Employee> employees;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project" , cascade = CascadeType.ALL)
     private List<Task> tasks;
 }
 

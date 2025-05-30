@@ -27,7 +27,7 @@ public class Task {
 
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "task" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task" )     //cascade = CascadeType.ALL  := use ten after delete task id then employee also delet bez taskId assign with employee
     @JsonManagedReference
     private List <Employee> employee;
 

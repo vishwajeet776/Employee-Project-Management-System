@@ -10,5 +10,5 @@ public interface AddressService {
     AddressDTO updateAddress(Long id, AddressDTO dto);
     AddressDTO getAddressById(Long id);
     List<AddressDTO> getAllAddresses();
-    void deleteAddress(Long id);
+    String deleteAddress(Long id);
 }

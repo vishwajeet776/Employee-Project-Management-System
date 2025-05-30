@@ -16,28 +16,44 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/create")
-    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO dto) {
-        return ResponseEntity.ok(taskService.createTask(dto));
+    public ResponseEntity<String> createTask(@RequestBody TaskDTO dto) {
+
+        if(dto.getTitle() ==null || dto.getTitle().isEmpty() || dto.getStatus()==null )
+        {
+            return ResponseEntity.badRequest().body("provide Title & Status properly ");
+        }
+
+        taskService.createTask(dto);
+
+        return ResponseEntity.status(201).body( "task created ");
     }
 
     @GetMapping("/get")
     public ResponseEntity<TaskDTO> getTask(@RequestParam Long id) {
+
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
     @GetMapping("/list")
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
+
         return ResponseEntity.ok(taskService.getAllTasks());
     }
 
+
     @PutMapping("/update")
     public ResponseEntity<TaskDTO> updateTask(@RequestParam Long id, @RequestBody TaskDTO dto) {
-        return ResponseEntity.ok(taskService.updateTask(id, dto));
+
+       TaskDTO taskUpdate = taskService.updateTask(id, dto);
+
+        return ResponseEntity.status(200).body(taskUpdate);
     }
 
+
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteTask(@RequestParam Long id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.ok("Task deleted successfully");
+    public ResponseEntity <String> deleteTask(@RequestParam Long id) {
+
+      return ResponseEntity.ok( taskService.deleteTask(id)  );
+
     }
 }

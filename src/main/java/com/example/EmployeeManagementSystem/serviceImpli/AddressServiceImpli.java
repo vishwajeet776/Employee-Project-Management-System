@@ -3,6 +3,7 @@ package com.example.EmployeeManagementSystem.serviceImpli;
 import com.example.EmployeeManagementSystem.Repository.AddressRepository;
 import com.example.EmployeeManagementSystem.dto.AddressDTO;
 import com.example.EmployeeManagementSystem.entity.Address;
+import com.example.EmployeeManagementSystem.exceptionHandler.ResourseNotFoundException;
 import com.example.EmployeeManagementSystem.mapper.AddressMapper;
 import com.example.EmployeeManagementSystem.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,10 @@ public class AddressServiceImpli implements AddressService {
     }
 
     @Override
-    public void deleteAddress(Long id) {
+    public String deleteAddress(Long id) {
+        addressRepo.findById(id).orElseThrow(()->new ResourseNotFoundException("Address not Found ID: "+id));
+
         addressRepo.deleteById(id);
+        return "Address Delete Successfully ID:"+id;
     }
 }

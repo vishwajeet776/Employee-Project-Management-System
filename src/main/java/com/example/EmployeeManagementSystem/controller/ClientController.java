@@ -16,8 +16,15 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("/create")
-    public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO dto) {
-        return ResponseEntity.ok(clientService.createClient(dto));
+    public ResponseEntity<String> createClient(@RequestBody ClientDTO dto) {
+
+        if(dto.getName() == null || dto.getName().isEmpty())
+        {
+            ResponseEntity.badRequest().body("provide Name !");
+        }
+
+        clientService.createClient(dto);
+        return ResponseEntity.status(201).body("client successfully save");
     }
 
     @GetMapping("/get")
@@ -31,8 +38,10 @@ public class ClientController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ClientDTO> updateClient(@RequestParam Long id, @RequestBody ClientDTO dto) {
-        return ResponseEntity.ok(clientService.updateClient(id, dto));
+    public ResponseEntity<String> updateClient(@RequestParam Long id, @RequestBody ClientDTO dto) {
+
+       clientService.updateClient(id, dto);
+        return ResponseEntity.status(200).body("client updated") ;
     }
 
     @DeleteMapping("/delete")

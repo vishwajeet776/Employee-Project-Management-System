@@ -23,7 +23,7 @@ public class Client {
     private LocalDate contractStartDate;
     private LocalDate contractEndDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)          // delete client then Address also Deleted bez " CascadeType.All "
     @JoinColumn(name = "address_id")
     private Address address;
 
@@ -34,7 +34,7 @@ public class Client {
     private List<Project> projects;
 }
 
-/*   postman
+/*   postman ( http://localhost:8080/api/client/get?id=1 )
 {
   "firstName": "John",
   "lastName": "Doe",

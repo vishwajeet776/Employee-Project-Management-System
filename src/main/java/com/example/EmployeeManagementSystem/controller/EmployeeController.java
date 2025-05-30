@@ -16,9 +16,17 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping("/create")
-    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO dto) {
-        return ResponseEntity.ok(employeeService.createEmployee(dto));
+    public ResponseEntity<String> createEmployee(@RequestBody EmployeeDTO dto) {
+
+        //400 Bad Request: Example for validation failure
+        if(dto.getName()  == null  && dto.getSalary() == null)         // Name & Salary if Compusary to pass both field otherwise send error message.
+        {
+            return ResponseEntity.badRequest().body(" Name & salary is Not Null ");
+        }
+              employeeService.createEmployee(dto);
+        return ResponseEntity.status(201).body("Employee Successfully Created.");
     }
+
 
     @GetMapping("/get")
     public ResponseEntity<EmployeeDTO> getEmployee(@RequestParam Long id) {
@@ -36,8 +44,9 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteEmployee(@RequestParam Long id) {
+    public ResponseEntity< String > deleteEmployee(@RequestParam Long id) {
+
         employeeService.deleteEmployee(id);
-        return ResponseEntity.ok("Employee deleted successfully");
+        return ResponseEntity.noContent().build();   // 204 No Content
     }
 }

@@ -16,8 +16,15 @@ public class ProjectController {
     private ProjectService projectService;
 
     @PostMapping("/create")
-    public ResponseEntity<ProjectDTO> createProject(@RequestBody ProjectDTO dto) {
-        return ResponseEntity.ok(projectService.createProject(dto));
+    public ResponseEntity<String> createProject(@RequestBody ProjectDTO dto) {
+
+        if(dto.getName() == null || dto.getStatus() == null)
+        {
+            return ResponseEntity.badRequest().body("provide Name & status field ");
+        }
+        projectService.createProject(dto);
+
+        return ResponseEntity.status(201).body("project add successfully");
     }
 
     @GetMapping("/get")
