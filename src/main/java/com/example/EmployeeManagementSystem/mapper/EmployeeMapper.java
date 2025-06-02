@@ -55,6 +55,8 @@ public class EmployeeMapper {
         if(employee.getTask()!=null) {
             dto.setTaskId(employee.getTask().getId());
         }
+
+
         return dto;
     }
 
@@ -92,10 +94,12 @@ public class EmployeeMapper {
                     .orElseThrow(() -> new RuntimeException("Project not found"));
             employee.setProject(project);
         }
-
+/*
         if(dto.getTaskId()!= null) {
             Task task = taskRepo.findById(dto.getTaskId()).orElseThrow(() -> new RuntimeException("task not found with ID :" + dto.getTaskId()));
         }
+
+ */
         return employee;
     }
 }

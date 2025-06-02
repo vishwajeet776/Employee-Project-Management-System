@@ -45,13 +45,13 @@ public class TaskServiceImpli implements TaskService {
 
     @Override
     public TaskDTO getTaskById(Long id) {
-        return taskMapper.entityToDto(taskRepo.findById(id).orElseThrow(()->new RuntimeException("task not found With ID: "+ id)));
+    return taskMapper.entityToDto(taskRepo.findById(id).orElseThrow(()->new  ResourseNotFoundException("! task not found With ID: "+ id)));
     }
 
     @Override
     public TaskDTO updateTask(Long id, TaskDTO dto) {
         Task existingTask = taskRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+                .orElseThrow(() -> new ResourseNotFoundException("! Task not found with id: " + id));
 
         // all "if{} condition check any field not provide ot updtate then store privious value automatically
 
@@ -81,7 +81,7 @@ public class TaskServiceImpli implements TaskService {
 
         if(dto.getProjectId()!=null) {
           Project project=  projectRepo.findById(dto.getProjectId()).orElseThrow(() ->
-                    new RuntimeException("Project not found with ID :" + dto.getProjectId()));
+                    new ResourseNotFoundException("! Project not found with ID :" + dto.getProjectId()));
 
           existingTask.setProject(project);
         }
@@ -93,8 +93,9 @@ public class TaskServiceImpli implements TaskService {
 
     @Override
     public String deleteTask(Long id) {
-     Task taskDelete = taskRepo.findById(id).orElseThrow(()-> new ResourseNotFoundException("Id not found: "+id));
-                                      // ResourseNotFoundException declare in exceptionHandler package
+     Task  taskDelete = taskRepo.findById(id).orElseThrow(()-> new ResourseNotFoundException("! Id not found: "+id));
+
+        // ResourseNotFoundException declare in exceptionHandler package
            taskRepo.delete(taskDelete);
                return "task deleted with ID: "+ id;
     }

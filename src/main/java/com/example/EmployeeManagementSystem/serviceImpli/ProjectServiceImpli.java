@@ -45,13 +45,13 @@ public class ProjectServiceImpli implements ProjectService {
 
     @Override
     public ProjectDTO getProjectById(Long id) {
-        return projectMapper.entityToDto(projectRepo.findById(id).orElseThrow(()-> new RuntimeException("Project Not Found With ID:"+id)));
+        return projectMapper.entityToDto(projectRepo.findById(id).orElseThrow(()-> new ResourseNotFoundException("! Project Not Found With ID:"+id)));
     }
 
     @Override
     public ProjectDTO updateProject(Long id, ProjectDTO pdto) {
 
-        Project existingProject = projectRepo.findById(id).orElseThrow(()->new RuntimeException("project not Found ID :"+ id));
+        Project existingProject = projectRepo.findById(id).orElseThrow(()->new ResourseNotFoundException("! project not Found ID :"+ id));
 
        //ProjectService Check for ifNonNull Method howni have use..
 
@@ -65,9 +65,9 @@ public class ProjectServiceImpli implements ProjectService {
         ifNonNull(pdto.getProjectEndDate() , existingProject :: setProjectEndDate);
 
         if(pdto.getClientId() != null) {
-            Client clientAavilable = clientRepo.findById(id).orElseThrow(() -> new RuntimeException("client Not found with ID :" + id));
 
-            existingProject.setClient(clientAavilable);
+            existingProject.setClient( clientRepo.findById(pdto.getClientId()).orElseThrow(() -> new ResourseNotFoundException
+                                                        ("! client Not found with ID :" + id)));
 
         }
             return projectMapper.entityToDto(projectRepo.save(existingProject));
@@ -78,7 +78,7 @@ public class ProjectServiceImpli implements ProjectService {
     @Override
     public void deleteProject(Long id) {
 
-        projectRepo.findById(id).orElseThrow(()->new ResourseNotFoundException("project Not Found ID:"+ id));
+        projectRepo.findById(id).orElseThrow(()->new ResourseNotFoundException("! project Not Found ID:"+ id));
 
         projectRepo.deleteById(id);
     }

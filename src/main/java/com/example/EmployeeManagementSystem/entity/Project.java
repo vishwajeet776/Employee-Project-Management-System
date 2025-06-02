@@ -22,7 +22,7 @@ public class Project {
     private LocalDate projectStartDate;
     private LocalDate projectEndDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     private Client client;
 

@@ -33,8 +33,36 @@ public class TaskMapper {
     @Autowired
     private ProjectRepository projectRepo;
 
+    public TaskDTO entityToDto(Task task) {
+        TaskDTO dto = new TaskDTO();
+
+        dto.setId(task.getId());
+        dto.setTitle(task.getTitle());
+        dto.setDescription(task.getDescription());
+        dto.setStatus(task.getStatus());
+        dto.setStartDate(task.getStartDate());
+        dto.setEndDate(task.getEndDate());
+
+        // Correctly map List<Employee> to List<Long> employee IDs
+        if (task.getEmployee() != null ) {
+            List<Long> employeeIds = task.getEmployee().stream()
+                    .map(Employee::getId)
+                    .collect(Collectors.toList());
+
+            dto.setEmployeeId(employeeIds);  // Make sure TaskDTO has List<Long> employeeId field
+        }
+
+        if (task.getProject() != null) {
+            dto.setProjectId(task.getProject().getId());
+        }
+
+        return dto;
+    }
+
+
     public Task dtoToEntity(TaskDTO dto) {
         Task task = new Task();
+
         task.setId(dto.getId());
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
@@ -63,7 +91,6 @@ public class TaskMapper {
                     .orElseThrow(() -> new RuntimeException("Project not found: " + dto.getProjectId()));
 
 
-
             task.setProject(project);
         }
 
@@ -71,29 +98,5 @@ public class TaskMapper {
     }
 
 
-    public TaskDTO entityToDto(Task task) {
-        TaskDTO dto = new TaskDTO();
 
-        dto.setId(task.getId());
-        dto.setTitle(task.getTitle());
-        dto.setDescription(task.getDescription());
-        dto.setStatus(task.getStatus());
-        dto.setStartDate(task.getStartDate());
-        dto.setEndDate(task.getEndDate());
-
-        // Correctly map List<Employee> to List<Long> employee IDs
-        if (task.getEmployee() != null ) {
-            List<Long> employeeIds = task.getEmployee().stream()
-                    .map(Employee::getId)
-                    .collect(Collectors.toList());
-
-            dto.setEmployeeId(employeeIds);  // Make sure TaskDTO has List<Long> employeeId field
-        }
-
-        if (task.getProject() != null) {
-            dto.setProjectId(task.getProject().getId());
-        }
-
-        return dto;
-    }
 }

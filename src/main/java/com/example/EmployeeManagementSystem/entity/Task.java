@@ -31,7 +31,7 @@ public class Task {
     @JsonManagedReference
     private List <Employee> employee;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
  //   @JoinColumn(name = "project_id")  FK column created
     private Project project;
 

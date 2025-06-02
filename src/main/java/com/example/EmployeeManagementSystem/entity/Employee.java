@@ -30,12 +30,12 @@ public class Employee {
     @JsonBackReference
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")          //FK
     @JsonBackReference
     private Client client;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")       //FK
     @JsonBackReference
     private Project project;
