@@ -22,7 +22,7 @@ public ResponseEntity<String> handleCatageoryAlreadyExistException (CatageoryAlr
 }
 
 
-@ExceptionHandler(ResourseNotFoundException.class)
+@ExceptionHandler(ResourseNotFoundException.class)               //this line check Exception in 1st & 2nd method if class match with Exception the throw otherwise go to last method Exception.class.
 public ResponseEntity<ExceptionResponseDTO> handleResourseNotFoundException(ResourseNotFoundException ex, WebRequest webRequest)
 {
     //workable only where ResourseNotFoundException Declare
@@ -36,6 +36,20 @@ public ResponseEntity<ExceptionResponseDTO> handleResourseNotFoundException(Reso
             LocalDateTime.now()
     );
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponseDTO);
+}
+
+@ExceptionHandler(Exception.class)                           // if no method match then this Exception.class throw Exception
+public ResponseEntity<ExceptionResponseDTO> handleGlobalException(Exception ex, WebRequest webRequest) {
+
+    ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(      //use= status, error msg, Date & Time
+
+            webRequest.getDescription(false),
+
+            HttpStatus.NOT_FOUND,
+            ex.getMessage(),
+            LocalDateTime.now()
+    );
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponseDTO);
 }
 
 }
