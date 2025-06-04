@@ -1,7 +1,11 @@
 package com.example.EmployeeManagementSystem.exceptionHandler;
 
 public class Notes_Exception {
+
     /*
+
+    create ExceptionResponse class to send error path, Date ,time , StatusCOde when error occur
+
     1 = we can define our own method in Repository and use in ServiceImpli class
     2 = Exception Handler class write " Custom Exception " OR  "Global Exceptions "
     3 = in Serviceimpli class we throw new CatageoryalreadyExist { created Exception class name }  but return larger unused messgae. thats why

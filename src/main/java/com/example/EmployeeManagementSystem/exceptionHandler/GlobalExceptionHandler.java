@@ -1,55 +1,77 @@
 package com.example.EmployeeManagementSystem.exceptionHandler;
 
 
-import com.example.EmployeeManagementSystem.dto.ExceptionResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 
-
-@ControllerAdvice
-public class GlobalExceptionHandler {                     // dont need to use try catch block for ex. use in " EmployeServiceImpli clas in create method & controller method "
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 
-@ExceptionHandler(CatageoryAlreadyExistException.class)     //customException class name i Annotation call custom Exption class
-public ResponseEntity<String> handleCatageoryAlreadyExistException (CatageoryAlreadyExistException ex)
-{
-    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
-}
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(IllegalArgument.class)
+    public ResponseEntity<?> handleIllegalArgument(IllegalArgument ex)
+    {
+        log.warn("GlobalException-  llegalArgument Error occur", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST ) .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)                  // use with EmployeeServiceImpli class for "create" method to avoid dublicate name .
+    public ResponseEntity<ExceptionResponse> handleResourceAlreadyExists(ResourceAlreadyExistsException ex, WebRequest request) {
+
+        log.warn("globalException- data AlreadyExist Error occur", ex.getMessage());
+        ExceptionResponse response = new ExceptionResponse(
+                request.getDescription(false),
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
 
 
-@ExceptionHandler(ResourseNotFoundException.class)               //this line check Exception in 1st & 2nd method if class match with Exception the throw otherwise go to last method Exception.class.
-public ResponseEntity<ExceptionResponseDTO> handleResourseNotFoundException(ResourseNotFoundException ex, WebRequest webRequest)
-{
-    //workable only where method throw ResourseNotFoundException Declare in m
+    //this line check Exception in 1st & 2nd method if class match with Exception the throw otherwise go to last method Exception.class.
 
-    ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(      //use= status, error msg, Date & Time
+    @ExceptionHandler(ResourseNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleResourseNotFoundException(ResourseNotFoundException ex, WebRequest webRequest)
+    {
 
-            webRequest.getDescription(false),
+        log.warn("GlobalExceptiion- ResourseNotFound Exception: {} ",ex.getMessage());
+        ExceptionResponse exceptionResponse = new ExceptionResponse(        //workable only where method throw ResourseNotFoundException Declare in m
 
-            HttpStatus.NOT_FOUND,
-            ex.getMessage(),
-            LocalDateTime.now()
-    );
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponseDTO);
-}
+                webRequest.getDescription(false),
 
-@ExceptionHandler(Exception.class)                           // if no method match then this Exception.class throw Exception
-public ResponseEntity<ExceptionResponseDTO> handleGlobalException(Exception ex, WebRequest webRequest) {
+                HttpStatus.NOT_FOUND,                              // this all taken from Exception class
+                ex.getMessage(),
+                LocalDateTime.now()
+        );                                                                //use= status, error msg, Date & Time
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    }
 
-    ExceptionResponseDTO exceptionResponseDTO = new ExceptionResponseDTO(      //use= status, error msg, Date & Time
 
-            webRequest.getDescription(false),
+    @ExceptionHandler(Exception.class)
+    // if no method match then this Exception.class throw Exception
+    public ResponseEntity<ExceptionResponse> handleGlobalException(Exception ex, WebRequest webRequest) {
 
-            HttpStatus.NOT_FOUND,
-            ex.getMessage(),
-            LocalDateTime.now()
-    );
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponseDTO);
-}
+        log.error("Unhandled exception occurred: {}", ex.getMessage(), ex);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(              //use= status, error msg, Date & Time
+
+                webRequest.getDescription(false),                 // path (e.g., "/api/employees/5")
+
+                HttpStatus.INTERNAL_SERVER_ERROR,                              //  status code (e.g., 404)
+                ex.getMessage(),                                          // exception message
+                LocalDateTime.now()                                      // current timestamp
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+    }
+
 
 }

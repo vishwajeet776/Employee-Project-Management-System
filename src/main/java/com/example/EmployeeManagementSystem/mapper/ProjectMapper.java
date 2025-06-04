@@ -11,6 +11,7 @@ import com.example.EmployeeManagementSystem.entity.Task;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class ProjectMapper {
     @Autowired
     private ClientRepository clientRepo;
@@ -25,6 +27,9 @@ public class ProjectMapper {
     private TaskRepository taskRepo ;
 
     public ProjectDTO entityToDto(Project project) {
+
+        log.debug("Mapping Project Entity to DTO: {}", project);
+
         ProjectDTO dto = new ProjectDTO();
         dto.setId(project.getId());
         dto.setName(project.getName());
@@ -39,6 +44,9 @@ public class ProjectMapper {
     }
 
     public Project dtoToEntity(ProjectDTO dto) {
+
+        log.debug("Mapping Project dtoToEntity : {}", dto);
+
         Project project = new Project();
         project.setId(dto.getId());
         project.setName(dto.getName());
@@ -48,6 +56,8 @@ public class ProjectMapper {
         project.setProjectEndDate(dto.getProjectEndDate());
 
         if (dto.getClientId() != null) {
+
+            log.info("checking");
             Client client = clientRepo.findById(dto.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found"));
             project.setClient(client);
