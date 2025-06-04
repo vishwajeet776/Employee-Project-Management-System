@@ -11,8 +11,7 @@ import com.example.EmployeeManagementSystem.exceptionHandler.ResourseNotFoundExc
 import com.example.EmployeeManagementSystem.mapper.TaskMapper;
 import com.example.EmployeeManagementSystem.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskServiceImpli implements TaskService {
 
 
@@ -31,25 +31,31 @@ public class TaskServiceImpli implements TaskService {
 
     @Override
     public TaskDTO createTask(TaskDTO dto) {
+
+        log.info("Creating new task: {}", dto.getDescription());
         Task task = taskMapper.dtoToEntity(dto);
 
         Task t = taskRepo.save(task);
 
+        log.info("Task created with ID: {}", t.getId());
         return taskMapper.entityToDto(t);
     }
 
     @Override
     public List<TaskDTO> getAllTasks() {
+        log.info("Fetching all tasks list");
         return taskRepo.findAll().stream().map(taskMapper::entityToDto).collect(Collectors.toList());
     }
 
     @Override
     public TaskDTO getTaskById(Long id) {
+        log.info("Fetching task by ID: {}", id);
     return taskMapper.entityToDto(taskRepo.findById(id).orElseThrow(()->new  ResourseNotFoundException("! task not found With ID: "+ id)));
     }
 
     @Override
     public TaskDTO updateTask(Long id, TaskDTO dto) {
+        log.info("Updating task with ID: {}", id);
         Task existingTask = taskRepo.findById(id)
                 .orElseThrow(() -> new ResourseNotFoundException("! Task not found with id: " + id));
 
@@ -69,12 +75,6 @@ public class TaskServiceImpli implements TaskService {
         {
           List<Employee> empAvailable = employeeRepo.findAllById(dto.getEmployeeId());
 
-         /* for(Employee emp : empAvailable)       // forEach loop use to set foreign key taskId in employee table
-          {
-              emp.setTask(existingTask);
-          }
-
-          */
             existingTask.setEmployee(empAvailable);
 
         }
@@ -88,15 +88,18 @@ public class TaskServiceImpli implements TaskService {
 
 
         Task updatedTask = taskRepo.save(existingTask);
+        log.info("Task updated successfully with ID: {}", updatedTask.getId());
         return taskMapper.entityToDto(updatedTask);
     }
 
     @Override
     public String deleteTask(Long id) {
+        log.info("Deleting task with ID: {}", id);
      Task  taskDelete = taskRepo.findById(id).orElseThrow(()-> new ResourseNotFoundException("! Id not found: "+id));
 
         // ResourseNotFoundException declare in exceptionHandler package
            taskRepo.delete(taskDelete);
+             log.info("Task deleted successfully with ID: {}", id);
                return "task deleted with ID: "+ id;
     }
 }

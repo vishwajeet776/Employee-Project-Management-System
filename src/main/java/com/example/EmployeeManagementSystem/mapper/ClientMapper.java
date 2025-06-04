@@ -12,18 +12,23 @@ import com.example.EmployeeManagementSystem.entity.Project;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class ClientMapper {
 
     @Autowired
     private AddressRepository addressRepo;
 
     public ClientDTO entityToDto(Client client) {
+
+        log.debug("Mapping Client Entity To DTO: {}",client.getId());
+
         ClientDTO dto = new ClientDTO();
         dto.setId(client.getId());
         dto.setName(client.getName());
@@ -42,11 +47,13 @@ public class ClientMapper {
 
             dto.setAddressDto(addressDTO);
         }
+        log.debug("Mapped DTO: {}", dto);
         return dto;
     }
 
     public Client dtoToEntity(ClientDTO dto) {
-        Client client = new Client();
+
+        log.debug("Mapping client DTO to Entity{}",dto.getId());        Client client = new Client();
 
         client.setId(dto.getId());
         client.setName(dto.getName());
@@ -71,6 +78,8 @@ public class ClientMapper {
 
           */
         }
+
+        log.debug("");
         return client;
     }
 
