@@ -4,10 +4,12 @@ import com.example.EmployeeManagementSystem.Repository.*;
 import com.example.EmployeeManagementSystem.dto.AddressDTO;
 import com.example.EmployeeManagementSystem.dto.EmployeeDTO;
 import com.example.EmployeeManagementSystem.entity.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class EmployeeMapper {
 
     @Autowired
@@ -23,6 +25,8 @@ public class EmployeeMapper {
     private EmployeeRepository employeeRepo ;
 
     public EmployeeDTO entityToDto(Employee employee) {
+
+        log.debug("EmployeeDTO- mapping entity to DTO conver");
         EmployeeDTO dto = new EmployeeDTO();
 
         dto.setId(employee.getId());
@@ -61,6 +65,8 @@ public class EmployeeMapper {
     }
 
     public Employee dtoToEntity(EmployeeDTO dto) {
+
+        log.debug(" mapping dto TO Entity convert ");
         Employee employee = new Employee();
 
         employee.setId(dto.getId());
@@ -84,12 +90,16 @@ public class EmployeeMapper {
 
         // Client & Project Mapping
         if (dto.getClientId() != null) {
+
+            log.info("checking client ID: {}", dto.getClientId());
             Client client = clientRepo.findById(dto.getClientId())
                     .orElseThrow(() -> new RuntimeException("Client not found"));
             employee.setClient(client);
         }
 
         if (dto.getProjectId() != null) {
+
+            log.info("checking client ID: {}", dto.getProjectId());
             Project project = projectRepo.findById(dto.getProjectId())
                     .orElseThrow(() -> new RuntimeException("Project not found"));
             employee.setProject(project);

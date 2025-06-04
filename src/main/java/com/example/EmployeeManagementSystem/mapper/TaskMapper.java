@@ -14,6 +14,7 @@ import com.example.EmployeeManagementSystem.entity.Task;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 @Component
+@Slf4j
 public class TaskMapper {
 
     @Autowired
@@ -34,6 +36,8 @@ public class TaskMapper {
     private ProjectRepository projectRepo;
 
     public TaskDTO entityToDto(Task task) {
+
+        log.debug("TaskMapper - Mapping entity to DTO: {}", task);
         TaskDTO dto = new TaskDTO();
 
         dto.setId(task.getId());
@@ -61,6 +65,9 @@ public class TaskMapper {
 
 
     public Task dtoToEntity(TaskDTO dto) {
+
+        log.debug("TaskMapper - Mapping DTO to entity: {}", dto);
+
         Task task = new Task();
 
         task.setId(dto.getId());
@@ -70,7 +77,6 @@ public class TaskMapper {
         task.setStartDate(dto.getStartDate());
         task.setEndDate(dto.getEndDate());
 
-        //this is use to check emp ID avilable or not and set taskId in employee table
 
         if (dto.getEmployeeId() != null) {           //// assuming each employee links to this task
             List<Employee> employees = dto.getEmployeeId().stream()
