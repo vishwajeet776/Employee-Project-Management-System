@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleIllegalArgument(IllegalArgument ex)
     {
         log.warn("GlobalException-  llegalArgument Error occur", ex.getMessage());
+        log.warn("GlobalException-  IllegalArgument Error occur", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST ) .body(ex.getMessage());
     }
 
