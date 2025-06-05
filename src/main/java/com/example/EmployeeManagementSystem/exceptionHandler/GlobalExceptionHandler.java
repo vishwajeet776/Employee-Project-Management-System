@@ -17,14 +17,14 @@ import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    /*
+
     @ExceptionHandler(IllegalArgument.class)
     public ResponseEntity<?> handleIllegalArgument(IllegalArgument ex)
     {
         log.warn("GlobalException-  IllegalArgument Error occur", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST ) .body(ex.getMessage());
     }
-*/
+
     @ExceptionHandler(ResourceAlreadyExistsException.class)                  // use with EmployeeServiceImpli class for "create" method to avoid dublicate name .
     public ResponseEntity<ExceptionResponse> handleResourceAlreadyExists(ResourceAlreadyExistsException ex, WebRequest request) {
 
