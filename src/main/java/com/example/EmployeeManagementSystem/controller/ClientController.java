@@ -2,6 +2,7 @@ package com.example.EmployeeManagementSystem.controller;
 
 import com.example.EmployeeManagementSystem.dto.ClientDTO;
 import com.example.EmployeeManagementSystem.service.ClientService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/api/client")
 @Slf4j
+@Tag(name=" Client API")                                  //Swagger= name change client-Controller TO Client API use @tag
 public class ClientController {
 
     @Autowired

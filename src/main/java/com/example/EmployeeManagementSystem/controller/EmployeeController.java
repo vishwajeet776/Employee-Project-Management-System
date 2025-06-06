@@ -2,6 +2,7 @@ package com.example.EmployeeManagementSystem.controller;
 
 import com.example.EmployeeManagementSystem.dto.EmployeeDTO;
 import com.example.EmployeeManagementSystem.service.EmployeeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
+@Tag(name="Emoployee API")                              //Swagger= name change employee-Controller TO Employee API use @tag
 public class EmployeeController {
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);

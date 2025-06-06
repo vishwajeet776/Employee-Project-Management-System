@@ -1,33 +1,53 @@
-HELP.md
+# Java
+*.class
+*.jar
+*.war
+*.log
+
+# Maven
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Gradle (if used)
+.gradle/
 build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# Logs
+logs/
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# VS Code
 .vscode/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# GitHub Desktop
+*.orig
+
+# Environment files
+.env
+*.env
+
+# Spring Boot specific
+spring-boot-devtools.properties
+hs_err_pid*
+/logs
