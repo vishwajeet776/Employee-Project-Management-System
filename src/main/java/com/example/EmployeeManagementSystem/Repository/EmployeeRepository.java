@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
    Optional<  Employee > findByName(String empName);             //EmployeeService- create method - check name already exist then throw custom exception
+
 }
