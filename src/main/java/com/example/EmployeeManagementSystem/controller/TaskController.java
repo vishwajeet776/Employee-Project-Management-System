@@ -1,7 +1,12 @@
 package com.example.EmployeeManagementSystem.controller;
 
 import com.example.EmployeeManagementSystem.dto.TaskDTO;
+import com.example.EmployeeManagementSystem.entity.Task;
 import com.example.EmployeeManagementSystem.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +23,11 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/create")
+    @Operation(
+            summary="Creating New Task", description="saving new task details and assign to employee" ,
+            responses = { @ApiResponse(responseCode = "200" , description = "Task Cresate Successfully", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Task.class ))),
+                    @ApiResponse(responseCode = "404" , description = "Task Failed to Create")
+            })
     public ResponseEntity<String> createTask(@RequestBody TaskDTO dto) {
 
         log.info("createTask- Checking Title{} ",dto.getTitle(), "And Status:{}",dto.getStatus());
@@ -32,14 +42,25 @@ public class TaskController {
         return ResponseEntity.status(201).body( "task created ");
     }
 
+
     @GetMapping("/get")
+    @Operation(
+            summary="Task Details By ID",
+            description="Using ID method provide Task Details "
+    )
+    @ApiResponse(responseCode = "200" , description = "Task fetched successfully by id")
     public ResponseEntity<TaskDTO> getTask(@RequestParam Long id) {
 
         log.info("getTask - Fetching task with ID: {}", id);
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
+
     @GetMapping("/list")
+    @Operation(
+            summary="List of Task", description="Fetching List of Task "
+    )
+    @ApiResponse( responseCode = "200" , description = "task list fetch successfully")
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
 
         log.info("getAllTasks - Retrieving all tasks");
@@ -48,6 +69,10 @@ public class TaskController {
 
 
     @PutMapping("/update")
+    @Operation(
+            summary="Updateing Task Details",
+            description="Using ID method Update All required details "
+    )
     public ResponseEntity<TaskDTO> updateTask(@RequestParam Long id, @RequestBody TaskDTO dto) {
 
         log.info("updateTask - Updating task with ID: {}", id);
@@ -59,6 +84,11 @@ public class TaskController {
 
 
     @DeleteMapping("/delete")
+    @Operation(
+            summary="Deleteing Task ",
+            description="Using ID deleting Task "
+    )
+    @ApiResponse(responseCode = "200" , description = "task delete successfully")
     public ResponseEntity <String> deleteTask(@RequestParam Long id) {
 
         log.info("deleteTask - Deleting task with ID: {}", id);

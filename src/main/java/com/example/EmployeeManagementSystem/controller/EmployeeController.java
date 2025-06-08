@@ -1,7 +1,12 @@
 package com.example.EmployeeManagementSystem.controller;
 
 import com.example.EmployeeManagementSystem.dto.EmployeeDTO;
+import com.example.EmployeeManagementSystem.entity.Employee;
 import com.example.EmployeeManagementSystem.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +43,14 @@ public class EmployeeController {
 
      */
 
+
     @PostMapping("/create")
+    @Operation(  summary = "Get employee by ID",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Employee CREATED",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Employee.class))),
+                    @ApiResponse(responseCode = "404", description = "Employee not CREATED") }
+    )
     public ResponseEntity< ? > createEmployee(@RequestBody EmployeeDTO dto)      // " ? " use in place "EmployeeDTO " Generic type " it accept all type
     {
                                                                             //using try, catch we send " single line "error message to user insted multiple line msg
@@ -56,14 +68,30 @@ public class EmployeeController {
     }
 
 
+
     @GetMapping("/get")
+    @Operation( summary = "Get employee by ID",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Found employee", content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Employee.class))),
+                    @ApiResponse(responseCode = "404", description = "Employee not found") }
+    )
     public ResponseEntity<EmployeeDTO> getEmployee(@RequestParam Long id) {
 
         logger.debug("GET /get - Fetching employee using ID: {}", id);
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
+
+
+
     @GetMapping("/list")
+    @Operation(summary="List of Employee",  description="this method gives All Employee List.",
+            responses = {
+                    @ApiResponse(responseCode = "200",description = "Found Employee List", content=@Content(mediaType ="application/json" ,
+                                    schema = @Schema(implementation = Employee.class ) )),
+                    @ApiResponse(responseCode = "404", description = "Employee not Found") }
+    )
     public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
 
         logger.info("GET /list - Fetching all employees");
@@ -73,14 +101,30 @@ public class EmployeeController {
         return ResponseEntity.ok(employees);
     }
 
+
+
     @PutMapping("/update")
+    @Operation( summary="updating Employee", description="by providing id we can update details of Employee ",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = @Content(mediaType = "appication/json",
+                            schema = @Schema(implementation = Employee.class) )),
+                    @ApiResponse(responseCode = "404") }
+    )
     public ResponseEntity<EmployeeDTO> updateEmployee(@RequestParam Long id, @RequestBody EmployeeDTO dto) {
 
         logger.info("PUT /update - Updating employee with ID: {}", id);
         return ResponseEntity.ok(employeeService.updateEmployee(id, dto));
     }
 
+
     @DeleteMapping("/delete")
+    @Operation(
+            summary="delete Employee", description="by providing id we can delete details of Employee ",
+            responses = {
+                    @ApiResponse(responseCode = "200" , description = "employee deleted successfully",content = @Content(mediaType = "appication/json",
+                            schema = @Schema(implementation = Employee.class))),
+                    @ApiResponse(responseCode = "404" , description = "Employee Not Found") }
+    )
     public ResponseEntity< String > deleteEmployee(@RequestParam Long id) {
 
         logger.info("DELETE /delete - Deleting employee with ID: {}", id);

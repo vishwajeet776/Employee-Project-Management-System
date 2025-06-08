@@ -1,12 +1,16 @@
 package com.example.EmployeeManagementSystem.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Schema(                            //swagger changing class name EmployeeDTO to Employee last of swagger page
+        name="Employee",
+        description="it hold Employee details with clientId, projectid, addressId, taskId "
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
