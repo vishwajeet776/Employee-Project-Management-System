@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,11 +25,12 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/api/client")
 @Slf4j
-@Tag(name=" Client API")                                  //Swagger= name change client-Controller TO Client API use @tag
+@Tag(name=" Client API")
+@RequiredArgsConstructor//Swagger= name change client-Controller TO Client API use @tag
 public class ClientController {
 
-    @Autowired
-    private ClientService clientService;
+
+    private final ClientService clientService;
 
 
     @PostMapping("/create")                       //Swagger @operation Providing method summary(name) & desciption

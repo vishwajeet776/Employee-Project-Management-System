@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +21,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
-@Tag(name="Emoployee API")                              //Swagger= name change employee-Controller TO Employee API use @tag
+@Tag(name="Emoployee API")
+@Slf4j
+@RequiredArgsConstructor//Swagger= name change employee-Controller TO Employee API use @tag
 public class EmployeeController {
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
-    @Autowired
-    private EmployeeService employeeService;
+
+    private final EmployeeService employeeService;
 
     /*
      @PostMapping("/create")
@@ -54,16 +58,16 @@ public class EmployeeController {
     public ResponseEntity< ? > createEmployee(@RequestBody EmployeeDTO dto)      // " ? " use in place "EmployeeDTO " Generic type " it accept all type
     {
                                                                             //using try, catch we send " single line "error message to user insted multiple line msg
-         logger.info("Post/create- creating employee: {}", dto.getName());                                                              //400 Bad Request: Example for validation failure
+         log.info("Post/create- creating employee: {}", dto.getName());                                                              //400 Bad Request: Example for validation failure
             if (dto.getName() == null && dto.getSalary() == null)         // Name & Salary if Compusary to pass both field otherwise send error message.
             {
-                logger.warn("Post / Create - Missing name And salary");
+                log.warn("Post / Create - Missing name And salary");
                 return ResponseEntity.badRequest().body(" Name & salary must Not Null ");
             }
 
                 EmployeeDTO employeeDTO =    employeeService.createEmployee(dto);
 
-              logger.info("Employee Created with ID: {} " , employeeDTO.getId() );
+              log.info("Employee Created with ID: {} " , employeeDTO.getId() );
             return ResponseEntity.status(HttpStatus.CREATED).body(employeeDTO);
     }
 
